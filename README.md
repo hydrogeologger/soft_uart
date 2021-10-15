@@ -18,15 +18,19 @@ This module creates a software-based serial port using a configurable pair of GP
 
 Fetch the source:
 ```
-git clone --depth 1 https://github.com/sfera-labs/soft_uart
+git clone --depth 1 https://github.com/hydrogeologger/soft_uart
 ```
 
 Install the package `raspberrypi-kernel-headers`:
 ```
-sudo apt-get install raspberrypi-kernel-headers
+sudo apt install raspberrypi-kernel-headers
+```
+If compilation error of kernel version not found, may need to install 'raspberrypi-kernel'
+```
+sudo apt install raspberrypi-kernel raspberrypi-kernel-headers
 ```
 
-Run `make` and `make install`, as usual.
+Run `make install`, as usual.
 ```
 cd soft_uart
 make
@@ -40,18 +44,29 @@ I haven't tried cross-compiling this module, but it should work as well.
 
 Module parameters:
 
-* gpio_tx: int [default = 17]
-* gpio_rx: int [default = 27]
+* gpio_tx: int [default = 16]
+* gpio_rx: int [default = 13]
 
 Loading the module with default parameters:
 ```
 sudo insmod soft_uart.ko
+```
+or
+```
+make load
 ```
 
 Loading module with custom parameters:
 ```
 sudo insmod soft_uart.ko gpio_tx=10 gpio_rx=11
 ```
+
+## Unloading
+To unload:
+`sudo rmmod soft_uart` or `make unload`
+
+## Reload module
+`make reload`
 
 
 ## Usage
