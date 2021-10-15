@@ -17,11 +17,13 @@ MODULE_AUTHOR("Adriano Marto Reis");
 MODULE_DESCRIPTION("Software-UART for Raspberry Pi");
 MODULE_VERSION("0.2");
 
-static int gpio_tx = 17;
+static int gpio_tx = 16;
 module_param(gpio_tx, int, 0);
+MODULE_PARM_DESC(gpio_tx, " GPIO TX pin [default = 16]");
 
-static int gpio_rx = 27;
+static int gpio_rx = 13;
 module_param(gpio_rx, int, 0);
+MODULE_PARM_DESC(gpio_rx, " GPIO RX pin [default = 13]");
 
 // Module prototypes.
 static int  soft_uart_open(struct tty_struct*, struct file*);
@@ -224,7 +226,17 @@ static void soft_uart_close(struct tty_struct* tty, struct file* file)
  */
 static int soft_uart_write(struct tty_struct* tty, const unsigned char* buffer, int buffer_size)
 {
-  return raspberry_soft_uart_send_string(buffer, buffer_size);
+  int temp = 0;
+  temp = raspberry_soft_uart_send_string(buffer, buffer_size);
+ 
+  printk(KERN_INFO "soft_uart: free space in queue before  %d", raspberry_soft_uart_get_tx_queue_room());  
+  while (raspberry_soft_uart_get_tx_queue_room() < 2)
+  {
+    msleep(1);
+  }
+  printk(KERN_INFO "soft_uart: free space in queue after %d", raspberry_soft_uart_get_tx_queue_room());
+  printk(KERN_INFO "soft_uart: return value  %d", temp);
+  return temp;
 }
 
 /**
