@@ -26,9 +26,12 @@ Install the package `raspberrypi-kernel-headers`:
 sudo apt install raspberrypi-kernel-headers
 ```
 If compilation error of kernel version not found, may need to install 'raspberrypi-kernel'
+May take roughly up to 30 mins
 ```
+sudo apt update
 sudo apt install raspberrypi-kernel raspberrypi-kernel-headers
 ```
+Make sure to reboot/restart system after kernel installation for kernel version to be updated.
 
 Run `make install`, as usual.
 ```
@@ -93,3 +96,7 @@ When choosing the baud rate, take into account that:
 * There will be other processes competing for CPU time.
 
 As a result, you can expect communication errors when using fast baud rates. So I would not try to go any faster than 4800 bps.
+
+## Load kernel module on boot
+To enable auto load of module on rpi bootup. Add `soft_uart` to a new line in `/etc/modules`
+
